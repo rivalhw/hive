@@ -1,0 +1,45 @@
+# 老道茶馆 3 SBD 有奖小调查 随机获奖者公示
+
+**Author:** @rivalhw  
+**Permlink:** 3-sbd  
+**Created:** 2018-11-20T14:04:21  
+**Category:** blog  
+**Tags:** {
+  "tags": [
+    "blog",
+    "cn-reader",
+    "cn",
+    "life"
+  ],
+  "users": [
+    "vivia",
+    "angelina6688",
+    "jiangchen"
+  ],
+  "image": [
+    "https://steemitimages.com/DQmQaWGyUgRyi7ouo9U387GHfrdqJFLx3iduyoHRFGdRPWt/16B2DF12-4BBF-4090-AC4D-CCD2237647CD.png"
+  ],
+  "links": [
+    "https://steemit.com/laodr-teahouse/@laodr/laodr-tea-house-11"
+  ],
+  "app": "steemit/0.1",
+  "format": "html"
+}
+
+---
+
+<html>
+<p>一周多前，老道茶馆轮到我做值日小二时，当日的主题是：<a href="https://steemit.com/laodr-teahouse/@laodr/laodr-tea-house-11">双11购物节你参与购物了吗？有兴趣想要翻看历史记录的可以猛击这里！</a></p>
+<p>为了让当日的评论更为热闹些，我加入了个有奖小调查，并承诺将会从评论区里随机选择三位幸运者，给予每位1 SBD的鼓励。</p>
+<p>一晃时间已经过去了9天，我今日想起来这件事，差点忘记了</p>
+<p>是时候兑现我的承诺了，</p>
+<p>虽然只是很小一点点鼓励，</p>
+<p>但毕竟是个承诺就要身体力行，无关乎事大小，</p>
+<p>我选了以下三位幸运者，分别是</p>
+<p>@vivia</p>
+<p>@angelina6688</p>
+<p>@jiangchen</p>
+<p>恭喜以上三位幸运者！</p>
+<p>每人1 SBD 共计 3SBD 已经转给大家了，谢谢！</p>
+<p><img src="https://steemitimages.com/DQmQaWGyUgRyi7ouo9U387GHfrdqJFLx3iduyoHRFGdRPWt/16B2DF12-4BBF-4090-AC4D-CCD2237647CD.png" width="638" height="439"/></p>
+</html>

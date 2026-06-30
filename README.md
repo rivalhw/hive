@@ -35,21 +35,29 @@ pip install requests
 
 ### 基本用法
 
+首次下载（下载全部帖子）：
+
 ```bash
-python download_hive_posts.py --account steemit
+python download_hive_posts.py --account rivalhw --api https://api.openhive.network --no-resume
+```
+
+后续增量更新（自动跳过已下载，只补新帖）：
+
+```bash
+python download_hive_posts.py --account rivalhw --api https://api.openhive.network
 ```
 
 ### 完整参数说明
 
 ```bash
 python download_hive_posts.py \
-  --account steemit \
-  --api https://api.hive.blog \
+  --account rivalhw \
+  --api https://api.openhive.network \
   --output ./posts \
   --start-date 2023-01-01 \
   --end-date 2023-12-31 \
-  --workers 8 \
-  --delay 0.2
+  --rps 3 \
+  --no-resume
 ```
 
 | 参数 | 说明 | 默认值 |
@@ -59,33 +67,34 @@ python download_hive_posts.py \
 | `--output` | 输出目录路径 | `./posts` |
 | `--start-date` | 起始日期 (格式: YYYY-MM-DD) | - |
 | `--end-date` | 结束日期 (格式: YYYY-MM-DD) | - |
-| `--workers` | 并发下载线程数 | `8` |
-| `--delay` | API 请求间隔（秒） | `0.2` |
+| `--rps` | 每秒最大请求数，过高会触发 429 限流 | `3` |
+| `--no-resume` | 忽略缓存，强制重新下载全部帖子 | 关闭 |
+| `--debug` | 打印每页首条帖子信息，便于排查问题 | 关闭 |
 
 ### 使用示例
 
-#### 下载特定用户的所有文章
+#### 下载特定用户的所有文章（含社区帖）
 
 ```bash
-python download_hive_posts.py --account alice
+python download_hive_posts.py --account alice --api https://api.openhive.network --no-resume
+```
+
+#### 增量更新（只下载新帖）
+
+```bash
+python download_hive_posts.py --account alice --api https://api.openhive.network
 ```
 
 #### 下载特定日期范围内的文章
 
 ```bash
-python download_hive_posts.py --account bob --start-date 2023-01-01 --end-date 2023-06-30
+python download_hive_posts.py --account bob --start-date 2023-01-01 --end-date 2023-06-30 --api https://api.openhive.network
 ```
 
-#### 使用自定义 API 节点和输出目录
+#### 遇到频繁 429 限流时降低请求速率
 
 ```bash
-python download_hive_posts.py --account charlie --api https://api.openhive.network --output ~/hive_backup
-```
-
-#### 降低并发数以避免 API 限制
-
-```bash
-python download_hive_posts.py --account dave --workers 4 --delay 0.5
+python download_hive_posts.py --account dave --api https://api.openhive.network --rps 1
 ```
 
 ## 📂 输出结构
@@ -133,18 +142,20 @@ posts/
 
 ## 🌐 可用的 Hive API 节点
 
-- `https://api.hive.blog` (默认)
-- `https://api.openhive.network`
+- `https://api.openhive.network` **(推荐，实测稳定)**
 - `https://rpc.ausbit.dev`
 - `https://hived.emre.sh`
+- `https://api.hive.blog` (默认，偶发 502)
 
 ## ⚙️ 工作原理
 
-1. **获取文章列表** - 使用 `condenser_api.get_blog_entries` 获取账户的所有博客条目
-2. **过滤转发** - 自动识别并排除转发（reblog）内容，只保留原创文章
-3. **并行下载** - 使用多线程并发获取每篇文章的完整内容
-4. **日期筛选** - 根据用户指定的日期范围过滤文章
-5. **保存文件** - 将文章内容保存为 Markdown 格式，并按日期层级组织
+1. **获取文章** - 使用 `condenser_api.get_discussions_by_author_before_date` 分页获取账户所有原创帖子（含社区帖），每页最多 20 条，每页返回完整内容，无需额外请求
+2. **增量跳过** - 将已下载的 permlink 记录在 `.downloaded_permlinks` 缓存文件中，重复运行时自动跳过
+3. **日期筛选** - 根据用户指定的日期范围过滤文章
+4. **限速保护** - 令牌桶限速器控制请求频率，避免触发 API 节点的 429 限流
+5. **保存文件** - 将文章内容保存为 Markdown 格式，并按 `账户/年/月/日` 层级组织
+
+> **注意**：旧版使用的 `condenser_api.get_blog_entries` 接口只返回 blog feed，**不包含发到社区（Community）的帖子**。2020 年 Hive 引入社区功能后，大量帖子通过该接口无法取到，务必使用当前接口。
 
 ## 🛠️ 开发计划
 
